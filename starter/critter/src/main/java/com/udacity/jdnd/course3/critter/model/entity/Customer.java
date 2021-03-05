@@ -2,6 +2,8 @@ package com.udacity.jdnd.course3.critter.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.udacity.jdnd.course3.critter.view.Views;
+import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.Entity;
@@ -9,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Data
+@ToString(includeFieldNames = true)
 @Entity
 @Table(name="customer")
 public class Customer {

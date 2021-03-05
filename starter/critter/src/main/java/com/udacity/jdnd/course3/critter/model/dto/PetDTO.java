@@ -1,11 +1,16 @@
 package com.udacity.jdnd.course3.critter.model.dto;
 
+import lombok.Data;
+import lombok.ToString;
+
 import java.time.LocalDate;
 
 /**
  * Represents the form that pet request and response data takes. Does not map
  * to the database directly.
  */
+@Data
+@ToString(includeFieldNames = true)
 public class PetDTO {
     private long id;
     private PetType type;

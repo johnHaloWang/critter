@@ -2,11 +2,15 @@ package com.udacity.jdnd.course3.critter.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.udacity.jdnd.course3.critter.view.Views;
+import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@Data
+@ToString(includeFieldNames = true)
 @Entity
 @Table(name="pet")
 public class Pet {
