@@ -31,7 +31,7 @@ public class PetService {
     }
 
     public List<Pet> getPets(){
-        log.info(TAG_ + "-> calling getPets function with ");
+        log.info(TAG_ + "-> calling getPets function");
         return petRepository.findAll();
     }
 
