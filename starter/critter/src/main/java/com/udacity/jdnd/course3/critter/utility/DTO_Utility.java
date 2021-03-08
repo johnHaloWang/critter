@@ -13,6 +13,7 @@ public class DTO_Utility{
     public static PetDTO convertPetToPetDto(Pet pet) {
         return new PetDTO(pet.getPet_id(), PetType.valueOf(pet.getType()), pet.getName(), pet.getOwnerId(), pet.getBirthDate(), pet.getNotes());
     }
+
     public static Pet convertPetDTO_to_Pet(PetDTO dto){
         return new Pet(dto.getId(),dto.getType().toString(), dto.getName(), dto.getOwnerId(), dto.getBirthDate(), dto.getNotes() );
     }

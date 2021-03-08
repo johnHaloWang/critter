@@ -10,5 +10,4 @@ import java.util.List;
 public interface PetRepository extends JpaRepository<Pet, Long> {
     //@Query("select * from Pet p where p.id =:petId")
     List<Pet> findPetsByOwnerId(Long petId);
-
 }

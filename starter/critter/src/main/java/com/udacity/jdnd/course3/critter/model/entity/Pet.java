@@ -28,7 +28,9 @@ public class Pet {
     private String name;
 
     @JsonView(Views.Public.class)
+    @ManyToOne(targetEntity = User.class)
     private long ownerId;
+
 
     @JsonView(Views.Public.class)
     private LocalDate birthDate;

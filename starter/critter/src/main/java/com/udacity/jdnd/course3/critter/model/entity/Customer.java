@@ -6,43 +6,24 @@ import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.Nationalized;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @ToString(includeFieldNames = true)
 @Entity
 @Table(name="customer")
-public class Customer {
-    @Id
-    @GeneratedValue
-    @JsonView(Views.Public.class)
-    private long id;
-    @JsonView(Views.Public.class)
-    @Nationalized
-    private String name;
+public class Customer extends User{
+
+
     @JsonView(Views.Public.class)
     private String phoneNumber;
     @JsonView(Views.Public.class)
     private String notes;
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    @OneToMany(mappedBy = "customer")
+    @JsonView(Views.Public.class)
+    private List<Long> petIds;
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -59,5 +40,12 @@ public class Customer {
     public void setNotes(String notes) {
         this.notes = notes;
     }
-    //    private List<Long> petIds;
+
+    public List<Long> getPetIds() {
+        return petIds;
+    }
+
+    public void setPetIds(List<Long> petIds) {
+        this.petIds = petIds;
+    }
 }
