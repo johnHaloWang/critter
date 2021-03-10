@@ -17,10 +17,19 @@ import javax.persistence.*;
 public class User {
     
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JsonView(Views.Public.class)
     @Nationalized // should use @Nationalized instead of @Type=nstring
     private String name;
+
+    public User(){
+
+    }
+
+    public User(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

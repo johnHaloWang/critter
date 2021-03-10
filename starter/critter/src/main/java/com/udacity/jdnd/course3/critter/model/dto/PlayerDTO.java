@@ -5,37 +5,33 @@ import lombok.ToString;
 
 import java.util.List;
 
-/**
- * Represents the form that customer request and response data takes. Does not map
- * to the database directly.
- */
 @Data
 @ToString(includeFieldNames = true)
-public class CustomerDTO {
-    private Long id;
+public class PlayerDTO {
+    private Long player_id;
     private String name;
     private String phoneNumber;
     private String notes;
-    private List<Long> petIds;
+    private List<Long> gunIds;
 
-    public CustomerDTO(){
+    public PlayerDTO(){
 
     }
 
-    public CustomerDTO(long id, String name, String phoneNumber, String notes, List<Long> petIds) {
-        this.id = id;
+    public PlayerDTO(Long player_id, String name, String phoneNumber, String notes, List<Long> gunIds) {
+        this.player_id = player_id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.notes = notes;
-        this.petIds = petIds;
+        this.gunIds = gunIds;
     }
 
     public Long getId() {
-        return id;
+        return player_id;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.player_id = id;
     }
 
     public String getName() {
@@ -62,11 +58,11 @@ public class CustomerDTO {
         this.notes = notes;
     }
 
-    public List<Long> getPetIds() {
-        return petIds;
+    public List<Long> getGunIds() {
+        return gunIds;
     }
 
-    public void setPetIds(List<Long> petIds) {
-        this.petIds = petIds;
+    public void setGunIds(List<Long> gunIds) {
+        this.gunIds = gunIds;
     }
 }
