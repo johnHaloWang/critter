@@ -6,8 +6,8 @@ import com.udacity.jdnd.course3.critter.model.dto.EmployeeRequestDTO;
 import com.udacity.jdnd.course3.critter.model.entity.Customer;
 import com.udacity.jdnd.course3.critter.model.entity.Employee;
 import com.udacity.jdnd.course3.critter.model.entity.Pet;
-import com.udacity.jdnd.course3.critter.service.PetService;
 import com.udacity.jdnd.course3.critter.service.UserService;
+import com.udacity.jdnd.course3.critter.utility.DTO_Utility;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,47 +34,31 @@ public class UserController {
 
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
-        //return userService.saveCustomer(customerDTO);
-        Customer customer = new Customer();
-        customer.setName(customerDTO.getName());
-        customer.setPhoneNumber(customerDTO.getPhoneNumber());
-        customer.setNotes(customerDTO.getNotes());
+        Customer customer = DTO_Utility.getCustomer(customerDTO);
         List<Long> petIds = customerDTO.getPetIds();
-        return getCustomerDTO(userService.saveCustomer(customer, petIds));
+        return DTO_Utility.getCustomerDTO(userService.saveCustomer(customer, petIds));
     }
 
     @GetMapping("/customer")
     public List<CustomerDTO> getAllCustomers(){
-        //return userService.getAllCustomers();
         List<Customer> list = userService.getAllCustomers();
-        List<CustomerDTO> dtoList = new ArrayList<>();
-
-        for(Customer customer: list){
-            CustomerDTO dto = getCustomerDTO(customer);
-            dtoList.add(dto);
-        }
-
-        return dtoList;
+        return DTO_Utility.getCustomerDTOList(list);
     }
 
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
-        return getCustomerDTO(userService.getCustomerByPetId(petId));
+        return DTO_Utility.getCustomerDTO(userService.getCustomerByPetId(petId));
     }
 
     @PostMapping("/employee")
     public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        Employee employee = new Employee();
-        employee.setId(employeeDTO.getId());
-        employee.setName(employeeDTO.getName());
-        employee.setSkills(employeeDTO.getSkills());
-        employee.setDaysAvailable(employeeDTO.getDaysAvailable());
-        return getEmployeeDTO(userService.saveEmployee(employee));
+        Employee employee = DTO_Utility.getEmployee(employeeDTO);
+        return DTO_Utility.getEmployeeDTO(userService.saveEmployee(employee));
     }
 
     @PostMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
-        return getEmployeeDTO(userService.getEmployee(employeeId));
+        return DTO_Utility.getEmployeeDTO(userService.getEmployee(employeeId));
     }
 
     @PutMapping("/employee/{employeeId}")
@@ -84,41 +68,7 @@ public class UserController {
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        List<EmployeeDTO> list = new ArrayList<>();
         List<Employee> employeeList = userService.findEmployeesForService(employeeDTO);
-        for(Employee e: employeeList){
-            list.add(getEmployeeDTO(e));
-        }
-        return list;
-    }
-
-    private CustomerDTO getCustomerDTO(Customer customer) {
-        CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setId(customer.getId());
-        customerDTO.setName(customer.getName());
-        customerDTO.setPhoneNumber(customer.getPhoneNumber());
-        customerDTO.setNotes(customer.getNotes());
-        List<Long> petIds = customer.getPets().stream().map(Pet::getId).collect(Collectors.toList());
-        customerDTO.setPetIds(petIds);
-        return customerDTO;
-    }
-
-    private static CustomerDTO convertEntityToCustomerDTO(Customer customer) {
-        CustomerDTO customerDTO = new CustomerDTO();
-        BeanUtils.copyProperties(customer, customerDTO);
-        if (customer.getPets() != null && customer.getPets().size() > 0) {
-            List<Long> petIds = new ArrayList<>();
-            customer.getPets().forEach(pet -> petIds.add(pet.getId()));
-            customerDTO.setPetIds(petIds);
-        }
-        return customerDTO;
-    }
-    private EmployeeDTO getEmployeeDTO(Employee employee) {
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setId(employee.getId());
-        employeeDTO.setName(employee.getName());
-        employeeDTO.setSkills(employee.getSkills());
-        employeeDTO.setDaysAvailable(employee.getDaysAvailable());
-        return employeeDTO;
+        return DTO_Utility.getEmployeeDTOList(employeeList);
     }
 }

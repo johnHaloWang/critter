@@ -10,97 +10,116 @@ import org.springframework.beans.BeanUtils;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class DTO_Utility{
-//    public static PetDTO convertPetToPetDto(Pet pet) {
-//        return new PetDTO(pet.getPet_id(), PetType.valueOf(pet.getType()), pet.getName(), pet.getOwnerId(), pet.getBirthDate(), pet.getNotes());
-//    }
-//
-//    public static Pet convertPetDTO_to_Pet(PetDTO dto){
-//        return new Pet(dto.getId(),dto.getType().toString(), dto.getName(), dto.getOwnerId(), dto.getBirthDate(), dto.getNotes() );
-//    }
-//
-//    public static List<PetDTO> convertToPetDtoList(List<Pet> petList) {
-//        List<PetDTO> list = new ArrayList<>();
-//        for(Pet pet: petList){
-//            PetDTO temp = convertPetToPetDto(pet);
-//            list.add(temp);
-//        }
-//        return list;
-//    }
-//
-//    public static List<Pet> convertPetDTO_to_petList(List<PetDTO> petDTOList) {
-//        List<Pet> list = new ArrayList<>();
-//        for(PetDTO dto: petDTOList){
-//            Pet temp = convertPetDTO_to_Pet(dto);
-//            list.add(temp);
-//        }
-//        return list;
-//    }
-//
-//    public static CustomerDTO convertCustomerToCustomerDto(Customer customer) {
-//        //CustomerDTO(long id, String name, String phoneNumber, String notes, List<Long> petIds)
-//        return new CustomerDTO(customer.getId(), customer.getName(), customer.getPhoneNumber(), customer.getNotes(), customer.getPetIds());
-//    }
-//
-//    public static Customer convertCustomerDTO_to_Customer(CustomerDTO dto){
-//        //Long id, String name, String phoneNumber, String notes, List<Long> petIds
-//        return new Customer(dto.getId(), dto.getName(), dto.getPhoneNumber(), dto.getNotes(), dto.getPetIds() );
-//    }
 
-//    public static EmployeeDTO convertEmployeeToEmployeeDto(Employee employee) {
-//        //long id, String name, Set<EmployeeSkill> skills, Set<DayOfWeek> daysAvailable) {
-//        return new EmployeeDTO(employee.getId(), employee.getName(), employee.getSkills(), employee.getDaysAvailable());
-//    }
-//
-//    public static Employee convertEmployeeDTO_to_Employee(EmployeeDTO dto){
-//        //Long id, String name, Set<EmployeeSkill> skills, Set<DayOfWeek> daysAvailable)
-//        return new Employee(dto.getId(), dto.getName(), dto.getSkills(), dto.getDaysAvailable());
-//    }
+    public static EmployeeDTO getEmployeeDTO(Employee employee) {
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        employeeDTO.setId(employee.getId());
+        employeeDTO.setName(employee.getName());
+        employeeDTO.setSkills(employee.getSkills());
+        employeeDTO.setDaysAvailable(employee.getDaysAvailable());
+        return employeeDTO;
+    }
 
-//    public static ScheduleDTO convertScheduleToScheduleDto(Schedule schedule) {
-//        return new ScheduleDTO(schedule.getId(), schedule.getEmployeeIds(), schedule.getPetIds(), schedule.getDate(), schedule.getActivities());
-//    }
-//
-//    public static Schedule convertScheduleDTO_to_Schedule(Schedule dto){
-//        return new Schedule(dto.getId(), dto.getEmployeeIds(), dto.getPetIds(), dto.getDate(), dto.getActivities());
-//    }
+    public static Employee getEmployee(EmployeeDTO employeeDTO){
+        Employee employee = new Employee();
+        employee.setId(employeeDTO.getId());
+        employee.setName(employeeDTO.getName());
+        employee.setSkills(employeeDTO.getSkills());
+        employee.setDaysAvailable(employeeDTO.getDaysAvailable());
+        return employee;
+    }
 
-//    public static List<CustomerDTO> convertToCustomerDtoList(List<Customer> customerList) {
-//        List<CustomerDTO> list = new ArrayList<>();
-//        for(Customer customer: customerList){
-//            CustomerDTO temp = convertCustomerToCustomerDto(customer);
-//            list.add(temp);
-//        }
-//        return list;
-//    }
-//
-//    public static List<Customer> convertCustomerDTO_to_customerList(List<CustomerDTO> customerDTOList) {
-//        List<Customer> list = new ArrayList<>();
-//        for(CustomerDTO dto: customerDTOList){
-//            Customer temp = convertCustomerDTO_to_Customer(dto);
-//            list.add(temp);
-//        }
-//        return list;
-//    }
+    public static PetDTO getPetDTO(Pet pet){
+        PetDTO petDTO = new PetDTO();
+        petDTO.setId(pet.getId());
+        petDTO.setName(pet.getName());
+        petDTO.setType(PetType.valueOf(pet.getType()));
+        petDTO.setOwnerId(pet.getCustomer().getId());
+        petDTO.setBirthDate(pet.getBirthDate());
+        petDTO.setNotes(pet.getNotes());
+        return petDTO;
+    }
 
-//    public static List<EmployeeDTO> convertToEmployeeDtoList(List<Employee> employeeList) {
-//        List<EmployeeDTO> list = new ArrayList<>();
-//        for(Employee employee: employeeList){
-//            EmployeeDTO temp = convertEmployeeToEmployeeDto(employee);
-//            list.add(temp);
-//        }
-//        return list;
-//    }
-//
-//    public static List<Employee> convertEmployeeDTO_to_employeeList(List<EmployeeDTO> employeeDTOList) {
-//        List<Employee> list = new ArrayList<>();
-//        for(EmployeeDTO dto: employeeDTOList){
-//            Employee temp = convertEmployeeDTO_to_Employee(dto);
-//            list.add(temp);
-//        }
-//        return list;
-//    }
+    public static Pet getPet(PetDTO petDTO){
+        Pet pet = new Pet();
+        pet.setType(petDTO.getType().toString());
+        pet.setName(petDTO.getName());
+        pet.setBirthDate(petDTO.getBirthDate());
+        pet.setNotes(petDTO.getNotes());
+        Customer customer = new Customer();
+        customer.setId(petDTO.getOwnerId());
+        pet.setCustomer(customer);
+        return pet;
+    }
+
+    public static List<PetDTO> getPetDTOList(List<Pet> list){
+        List<PetDTO> dtoList = new ArrayList<>();
+        for(Pet pet: list){
+            PetDTO dto = getPetDTO(pet);
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
+
+    public static List<Pet> getPetList(List<PetDTO> list){
+        List<Pet> petList = new ArrayList<>();
+        for(PetDTO petDTO: list){
+            Pet pet = getPet(petDTO);
+            petList.add(pet);
+        }
+        return petList;
+    }
+
+    public static Customer getCustomer(CustomerDTO customerDTO){
+        Customer customer = new Customer();
+        customer.setName(customerDTO.getName());
+        customer.setPhoneNumber(customerDTO.getPhoneNumber());
+        customer.setNotes(customerDTO.getNotes());
+        return customer;
+    }
+
+    public static CustomerDTO getCustomerDTO(Customer customer) {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setId(customer.getId());
+        customerDTO.setName(customer.getName());
+        customerDTO.setPhoneNumber(customer.getPhoneNumber());
+        customerDTO.setNotes(customer.getNotes());
+        List<Long> petIds = customer.getPets().stream().map(Pet::getId).collect(Collectors.toList());
+        customerDTO.setPetIds(petIds);
+        return customerDTO;
+    }
+
+    public static CustomerDTO convertEntityToCustomerDTO(Customer customer) {
+        CustomerDTO customerDTO = new CustomerDTO();
+        BeanUtils.copyProperties(customer, customerDTO);
+        if (customer.getPets() != null && customer.getPets().size() > 0) {
+            List<Long> petIds = new ArrayList<>();
+            customer.getPets().forEach(pet -> petIds.add(pet.getId()));
+            customerDTO.setPetIds(petIds);
+        }
+        return customerDTO;
+    }
+
+    public static List<CustomerDTO> getCustomerDTOList(List<Customer> list){
+        List<CustomerDTO> dtoList = new ArrayList<>();
+        for(Customer customer: list){
+            CustomerDTO dto = getCustomerDTO(customer);
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
+
+    public static List<EmployeeDTO> getEmployeeDTOList(List<Employee> employeeList){
+        List<EmployeeDTO> list = new ArrayList<>();
+        for(Employee e: employeeList){
+            list.add(getEmployeeDTO(e));
+        }
+        return list;
+    }
+
 
 }

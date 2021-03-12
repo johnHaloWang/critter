@@ -1,7 +1,5 @@
 package com.udacity.jdnd.course3.critter.service;
 
-import com.udacity.jdnd.course3.critter.model.dto.CustomerDTO;
-import com.udacity.jdnd.course3.critter.model.dto.EmployeeDTO;
 import com.udacity.jdnd.course3.critter.model.dto.EmployeeRequestDTO;
 import com.udacity.jdnd.course3.critter.model.dto.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.model.entity.Customer;
@@ -9,8 +7,7 @@ import com.udacity.jdnd.course3.critter.model.entity.Employee;
 import com.udacity.jdnd.course3.critter.model.entity.Pet;
 import com.udacity.jdnd.course3.critter.repository.EmployeeRepository;
 import com.udacity.jdnd.course3.critter.repository.PetRepository;
-import com.udacity.jdnd.course3.critter.repository.UserRepository;
-import com.udacity.jdnd.course3.critter.utility.DTO_Utility;
+import com.udacity.jdnd.course3.critter.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,14 +16,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class UserService {
 
     @Autowired
-    UserRepository customersRepository;
+    CustomerRepository customersRepository;
     @Autowired
     PetRepository petsRepository;
     @Autowired
@@ -52,7 +48,6 @@ public class UserService {
         }else{
             customer.setPets(pets);
         }
-
         return customersRepository.save(customer);
     }
 
@@ -84,64 +79,7 @@ public class UserService {
         return newList;
     }
 
-
-
-
-//    public Customer saveCustomer(Customer customer, List<Long> petIds) {
-//        List<Pet> pets = new ArrayList<>();
-//        if (petIds != null && !petIds.isEmpty()) {
-//
-//            pets = petIds.stream().map((petId) -> petsRepository.getOne(petId)).collect(Collectors.toList());
-//        }
-//        customer.setPets(pets);
-//        return userRepository.save(customer);
-//        return null;
-//    }
-
-//    public CustomerDTO getCusomterById(Long id){
-//        Customer temp = userRepository.getCusomterById(id);
-//        return DTO_Utility.convertCustomerToCustomerDto(temp);
-//    }
-//
-//    public CustomerDTO updateCustomer(CustomerDTO customerDTO){
-//        Customer customer = DTO_Utility.convertCustomerDTO_to_Customer(customerDTO);
-//        Customer temp = userRepository.updateCustomer(customer);
-//        return DTO_Utility.convertCustomerToCustomerDto(customer);
-//    }
-//
-//    public CustomerDTO saveCustomer(CustomerDTO customerDTO){
-//        Customer customer = DTO_Utility.convertCustomerDTO_to_Customer(customerDTO);
-//        Customer temp = userRepository.saveCustomer(customer);
-//        return DTO_Utility.convertCustomerToCustomerDto(customer);
-//    }
-//
-//    public List<CustomerDTO> getAllCustomers(){
-//        List<Customer> list = userRepository.getAllCustomer();
-//        return DTO_Utility.convertToCustomerDtoList(list);
-//    }
-//
-//    public CustomerDTO getOwnerByPet(@PathVariable long petId){
-//        Customer customer = userRepository.getOwnerByPet(petId);
-//        return DTO_Utility.convertCustomerToCustomerDto(customer);
-//    }
-
-
-//    public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
-//        Employee employee = DTO_Utility.convertEmployeeDTO_to_Employee(employeeDTO);
-//        Employee temp = userRepository.saveEmployee(employee);
-//        return DTO_Utility.convertEmployeeToEmployeeDto(temp);
-//    }
-//
-//    public EmployeeDTO getEmployee(@PathVariable long employeeId) {
-//        Employee employee = userRepository.getEmployee(employeeId);
-//        return DTO_Utility.convertEmployeeToEmployeeDto(employee);
-//    }
-
-//    public void setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
-//        userRepository.setAvailability(daysAvailable, employeeId);
-//    }
-//
-//    public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-//        return null;
-//    }
+    public List<Employee> findEmployeesByIds(List<Long> employeeIds){
+        return employeeRepository.findEmployeeByIds(employeeIds);
+    }
 }
