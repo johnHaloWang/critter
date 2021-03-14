@@ -16,7 +16,6 @@ import java.util.List;
 @ToString(includeFieldNames = true)
 @Entity
 @Table(name="customer")
-//public class Customer extends User implements Serializable {
 public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +30,7 @@ public class Customer implements Serializable {
 
     @JsonView(Views.Public.class)
     private String notes;
+
 
     @OneToMany(targetEntity = Pet.class)
     private List<Pet> pets;

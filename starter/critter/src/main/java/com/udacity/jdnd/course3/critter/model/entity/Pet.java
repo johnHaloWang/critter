@@ -34,6 +34,7 @@ public class Pet implements Serializable {
 
     @JsonView(Views.Public.class)
     @ManyToOne(targetEntity = Customer.class, optional = false)
+    //@ManyToOne
     private Customer customer;
 
     @JsonView(Views.Public.class)

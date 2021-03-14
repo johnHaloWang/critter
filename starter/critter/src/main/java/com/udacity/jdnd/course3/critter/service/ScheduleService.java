@@ -5,10 +5,7 @@ import com.udacity.jdnd.course3.critter.model.entity.Customer;
 import com.udacity.jdnd.course3.critter.model.entity.Employee;
 import com.udacity.jdnd.course3.critter.model.entity.Pet;
 import com.udacity.jdnd.course3.critter.model.entity.Schedule;
-import com.udacity.jdnd.course3.critter.repository.EmployeeRepository;
-import com.udacity.jdnd.course3.critter.repository.PetRepository;
-import com.udacity.jdnd.course3.critter.repository.CustomerRepository;
-import com.udacity.jdnd.course3.critter.repository.ScheduleRepository;
+import com.udacity.jdnd.course3.critter.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,12 +21,13 @@ import java.util.List;
 public class ScheduleService {
     @Autowired
     PetRepository petRepository;
-    @Autowired
-    private CustomerRepository customersRepository;
+
     @Autowired
     private EmployeeRepository employeeRepository;
     @Autowired
     private ScheduleRepository scheduleRepository;
+    @Autowired
+    UserRepository userRepository;
 
     private final static String TAG_ = "ScheduleService";
 
@@ -60,7 +58,7 @@ public class ScheduleService {
     }
 
     public List<Schedule> getScheduleForCustomer(long customerId) {
-        Customer customer = customersRepository.getOne(customerId);
+        Customer customer = userRepository.findCustomerById(customerId);
         List<Pet> pets = customer.getPets();
         return scheduleRepository.getAllByPetsIn(pets);
     }

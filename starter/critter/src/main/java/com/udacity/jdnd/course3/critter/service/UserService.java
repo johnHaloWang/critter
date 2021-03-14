@@ -7,7 +7,6 @@ import com.udacity.jdnd.course3.critter.model.entity.Employee;
 import com.udacity.jdnd.course3.critter.model.entity.Pet;
 import com.udacity.jdnd.course3.critter.repository.EmployeeRepository;
 import com.udacity.jdnd.course3.critter.repository.PetRepository;
-import com.udacity.jdnd.course3.critter.repository.CustomerRepository;
 import com.udacity.jdnd.course3.critter.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,6 @@ import java.util.*;
 public class UserService {
 
     @Autowired
-    CustomerRepository customersRepository;
-    @Autowired
     PetRepository petsRepository;
     @Autowired
     EmployeeRepository employeeRepository;
@@ -34,7 +31,6 @@ public class UserService {
     private final static String TAG_ = "UserService";
 
     public List<Customer> getAllCustomers() {
-        //return customersRepository.findAll();
         return userRepository.getAllCustomers();
     }
 
@@ -52,7 +48,7 @@ public class UserService {
         }else{
             customer.setPets(pets);
         }
-        return customersRepository.save(customer);
+        return userRepository.saveCustomer(customer);
     }
 
     public Employee saveEmployee(@RequestBody Employee employee) {
