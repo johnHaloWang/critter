@@ -9,7 +9,6 @@ import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
-import java.util.HashSet;
 import java.util.Set;
 
 @Data

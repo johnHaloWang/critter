@@ -1,26 +1,8 @@
 package com.udacity.jdnd.course3.critter.repository;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.udacity.jdnd.course3.critter.model.dto.CustomerDTO;
-import com.udacity.jdnd.course3.critter.model.dto.EmployeeDTO;
-import com.udacity.jdnd.course3.critter.model.dto.EmployeeRequestDTO;
-import com.udacity.jdnd.course3.critter.model.dto.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.model.entity.Customer;
-import com.udacity.jdnd.course3.critter.model.entity.Employee;
-import com.udacity.jdnd.course3.critter.view.Views;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.transaction.Transactional;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
 
 //@Slf4j
 @Repository

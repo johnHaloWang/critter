@@ -121,5 +121,33 @@ public class DTO_Utility{
         return list;
     }
 
+    public static ScheduleDTO getScheduleDTO(Schedule schedule){
+        ScheduleDTO scheduleDTO = new ScheduleDTO();
+        scheduleDTO.setDate(schedule.getDate());
+        scheduleDTO.setActivities(schedule.getActivities());
+        List<Long> employeesIds = new ArrayList<>();
+        List<Long> petsIds = new ArrayList<>();
+
+        List<Employee> employees = schedule.getEmployees();
+        List<Pet> pets = schedule.getPets();
+        for(Employee e: employees){
+            employeesIds.add(e.getId());
+        }
+        for(Pet p: pets){
+            petsIds.add(p.getId());
+        }
+        scheduleDTO.setPetIds(petsIds);
+        scheduleDTO.setEmployeeIds(employeesIds);
+        return scheduleDTO;
+    }
+
+    public static List<ScheduleDTO> getScheduleDTOs(List<Schedule> schedules){
+        List<ScheduleDTO> list = new ArrayList<>();
+        for(Schedule schedule: schedules){
+            list.add(getScheduleDTO(schedule));
+        }
+        return list;
+    }
+
 
 }

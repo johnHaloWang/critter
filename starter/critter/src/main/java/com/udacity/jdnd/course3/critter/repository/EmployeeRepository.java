@@ -14,6 +14,5 @@ import java.util.Set;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> getAllByDaysAvailableContains(DayOfWeek dayOfWeek);
-    List<Employee> findEmployeeByIds(List<Long> employeeIds);
-    List<Employee> findEmployeeIn(List<Long> employeeIds);
+    List<Employee> findByIdIn(List<Long> employeeIds);
 }

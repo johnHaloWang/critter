@@ -20,7 +20,6 @@ public class Schedule implements Serializable {
 
     @Id
     @GeneratedValue
-    @JsonView(Views.Public.class)
     private long id;
 
     @JsonView(Views.Public.class)
@@ -32,7 +31,7 @@ public class Schedule implements Serializable {
     private List<Pet> pets;
 
     @ElementCollection(targetClass = EmployeeSkill.class)
-//    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @JsonView(Views.Public.class)
     private Set<EmployeeSkill> activities;
 

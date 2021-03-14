@@ -8,6 +8,7 @@ import com.udacity.jdnd.course3.critter.model.entity.Pet;
 import com.udacity.jdnd.course3.critter.repository.EmployeeRepository;
 import com.udacity.jdnd.course3.critter.repository.PetRepository;
 import com.udacity.jdnd.course3.critter.repository.CustomerRepository;
+import com.udacity.jdnd.course3.critter.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,11 +28,14 @@ public class UserService {
     PetRepository petsRepository;
     @Autowired
     EmployeeRepository employeeRepository;
+    @Autowired
+    UserRepository userRepository;
 
     private final static String TAG_ = "UserService";
 
     public List<Customer> getAllCustomers() {
-        return customersRepository.findAll();
+        //return customersRepository.findAll();
+        return userRepository.getAllCustomers();
     }
 
     public Customer getCustomerByPetId(long petId) {
@@ -80,6 +84,10 @@ public class UserService {
     }
 
     public List<Employee> findEmployeesByIds(List<Long> employeeIds){
-        return employeeRepository.findEmployeeByIds(employeeIds);
+        return employeeRepository.findByIdIn(employeeIds);
+    }
+
+    public Employee findEmployeeById(Long employeeId){
+        return employeeRepository.getOne(employeeId);
     }
 }
