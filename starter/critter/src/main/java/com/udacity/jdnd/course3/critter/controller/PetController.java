@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.controller;
 import com.udacity.jdnd.course3.critter.model.dto.PetDTO;
 import com.udacity.jdnd.course3.critter.model.dto.PetType;
 import com.udacity.jdnd.course3.critter.model.entity.Pet;
+import com.udacity.jdnd.course3.critter.repository.PetDAO;
 import com.udacity.jdnd.course3.critter.service.PetService;
 import com.udacity.jdnd.course3.critter.utility.DTO_Utility;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,9 @@ public class PetController {
     @Autowired
     PetService petService;
 
+    @Autowired
+    PetDAO petDAO;
+
     @PostMapping("/{ownerId}")
     public PetDTO savePetWithOnwerId(@RequestBody PetDTO petDTO, @PathVariable Long ownerId) {
         petDTO.setOwnerId(ownerId);
@@ -33,7 +37,6 @@ public class PetController {
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
         Pet pet = DTO_Utility.getPet(petDTO);
-
         return DTO_Utility.getPetDTO(petService.savePet(pet, petDTO.getOwnerId()));
     }
 
@@ -41,6 +44,7 @@ public class PetController {
     public PetDTO getPet(@PathVariable long petId) {
 
         return DTO_Utility.getPetDTO(petService.getPetById(petId));
+
     }
 
     @GetMapping

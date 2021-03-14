@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.repository;
 
 import com.udacity.jdnd.course3.critter.model.dto.CustomerDTO;
 import com.udacity.jdnd.course3.critter.model.entity.Customer;
+import com.udacity.jdnd.course3.critter.model.entity.Employee;
 import com.udacity.jdnd.course3.critter.utility.DTO_Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -11,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import java.time.DayOfWeek;
 import java.util.List;
 
 @Slf4j
@@ -35,6 +37,7 @@ public class UserRepository {
         Customer customer = entityManager.find(Customer.class, id);
         return customer;
     }
+
 
 //    public void findExample(Long id) {
 //        Person p = entityManager.find(Person.class, id); //retrieve an instance by its key

@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.service;
 
 import com.udacity.jdnd.course3.critter.model.entity.Customer;
 import com.udacity.jdnd.course3.critter.model.entity.Pet;
+import com.udacity.jdnd.course3.critter.repository.PetDAO;
 import com.udacity.jdnd.course3.critter.repository.PetRepository;
 import com.udacity.jdnd.course3.critter.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -20,33 +21,34 @@ public class PetService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PetDAO petDAO;
+
     private final static String TAG_ = "PetService";
 
     public List<Pet> getAllPets() {
-        return petRepository.findAll();
+        return petDAO.getAllPets();
     }
 
     public List<Pet> getPetsByCustomerId(long customerId) {
-        return petRepository.findPetsByCustomerId(customerId);
+        return petDAO.getPetsByCustomerId(customerId);
     }
 
     public Pet getPetById(long petId) {
-        return petRepository.getOne(petId);
+        return petDAO.getPetById(petId);
     }
 
     public Pet savePet(Pet pet, long ownerId) {
-        //Customer customer = customersRepository.getOne(ownerId);
         Customer customer= userRepository.findCustomerById(ownerId);
         pet.setCustomer(customer);
         pet = petRepository.save(pet);
         customer.insertPet(pet);
-        //customersRepository.save(customer);
         userRepository.saveCustomer(customer);
         return pet;
     }
 
     public List<Pet> findPetsByIds(List<Long> petIds){
-        return petRepository.findPetsByIdIn(petIds);
+        return petDAO.findPetsByIds(petIds);
     }
 
 

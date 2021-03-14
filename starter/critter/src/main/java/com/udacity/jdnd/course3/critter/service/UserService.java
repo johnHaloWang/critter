@@ -67,8 +67,11 @@ public class UserService {
     }
 
     public List<Employee> findEmployeesForService(EmployeeRequestDTO employeeDTO) {
+        //input
         DayOfWeek target = employeeDTO.getDate().getDayOfWeek();
         Set<EmployeeSkill> skillSet = employeeDTO.getSkills();
+
+
         List<Employee> list = employeeRepository.getAllByDaysAvailableContains(target);
         List<Employee> newList = new ArrayList<>();
         for(Employee e: list){
