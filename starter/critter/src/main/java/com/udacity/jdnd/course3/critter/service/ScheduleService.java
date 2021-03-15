@@ -20,10 +20,7 @@ import java.util.List;
 @Service
 public class ScheduleService {
     @Autowired
-    PetRepository petRepository;
-
-    @Autowired
-    private EmployeeRepository employeeRepository;
+    PetDAO petDAO;
     @Autowired
     private ScheduleRepository scheduleRepository;
     @Autowired
@@ -44,12 +41,12 @@ public class ScheduleService {
     }
 
     public List<Schedule> getScheduleForPet(long petId) {
-        Pet pet = petRepository.getOne(petId);
+        Pet pet = petDAO.getPetById(petId);
         return scheduleRepository.getAllByPetsContains(pet);
     }
 
     public List<Schedule> getScheduleForEmployee(long employeeId) {
-        Employee employee = employeeRepository.getOne(employeeId);
+        Employee employee = userRepository.findEmployeeById(employeeId);
         return scheduleRepository.getAllByEmployeesContains(employee);
     }
 

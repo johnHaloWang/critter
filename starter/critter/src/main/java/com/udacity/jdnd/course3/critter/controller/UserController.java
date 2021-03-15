@@ -71,4 +71,14 @@ public class UserController {
         List<Employee> employeeList = userService.findEmployeesForService(employeeDTO);
         return DTO_Utility.getEmployeeDTOList(employeeList);
     }
+
+    @GetMapping("/employee/{employeeId}")
+    public EmployeeDTO getEmployeeById(@PathVariable long employeeId) {
+        return DTO_Utility.getEmployeeDTO(userService.getEmployee(employeeId));
+    }
+
+    @GetMapping("/employee")
+    public List<EmployeeDTO> getAllEmployee() {
+        return DTO_Utility.getEmployeeDTOList(userService.findAllEmployees());
+    }
 }

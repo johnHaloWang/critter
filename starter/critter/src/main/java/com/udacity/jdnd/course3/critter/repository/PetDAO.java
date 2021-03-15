@@ -3,22 +3,22 @@ package com.udacity.jdnd.course3.critter.repository;
 
 import com.udacity.jdnd.course3.critter.model.entity.Customer;
 import com.udacity.jdnd.course3.critter.model.entity.Pet;
-import com.udacity.jdnd.course3.critter.model.entity.PetRowMapper;
+import com.udacity.jdnd.course3.critter.model.entity.helper.PetRowMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 
+@Slf4j
 @Repository
 @Transactional
 public class PetDAO {
@@ -96,11 +96,19 @@ public class PetDAO {
     private static final RowMapper<Pet> petDataRowMapper = new BeanPropertyRowMapper<>(Pet.class);
 
     public Pet savePet(Pet pet, long ownerId) {
+//        simpleJdbcInsert.withTableName("pet").usingGeneratedKeyColumns("id");
+//        Map<String, Object> parameters = new HashMap<String, Object>();
+//        parameters.put("id", pet.getId());
+//        Number id = simpleJdbcInsert.executeAndReturnKey(parameters);
+//        pet.setId(Long.valueOf(new Long(id));
+
         Customer customer= userRepository.findCustomerById(ownerId);
         pet.setCustomer(customer);
-        int status = jdbcTemplate.update(SAVE_STRING_QUERY,new Object[] {pet.getBirthDate(),pet.getName(),ownerId,pet.getType(),pet.getNotes()});
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int status = jdbcTemplate.update(SAVE_STRING_QUERY,new Object[] {pet.getBirthDate(),pet.getName(),ownerId,pet.getType(),pet.getNotes()}, keyHolder);
         //id is an issue
-        pet.setId(status);
+        //pet.setId(status);
+        pet.setId((long) keyHolder.getKey());
         return pet;
     }
 
@@ -125,7 +133,7 @@ public class PetDAO {
 
     public List<Pet> findPetsByIds(List<Long> petIds){
         String inSql = String.join(",", Collections.nCopies(petIds.size(), "?"));
-        List<Pet> pets = jdbcTemplate.query(String.format(SELECT_PET_BY_IDS, inSql), new PetRowMapper());
+        List<Pet> pets = jdbcTemplate.query(String.format(SELECT_PET_BY_IDS, inSql), petIds.toArray(), new PetRowMapper());
         return pets;
     }
 }

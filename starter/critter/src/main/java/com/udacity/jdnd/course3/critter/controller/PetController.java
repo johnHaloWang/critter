@@ -42,9 +42,7 @@ public class PetController {
 
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
-
         return DTO_Utility.getPetDTO(petService.getPetById(petId));
-
     }
 
     @GetMapping

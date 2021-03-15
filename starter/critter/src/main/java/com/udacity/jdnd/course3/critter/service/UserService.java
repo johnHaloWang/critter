@@ -5,8 +5,7 @@ import com.udacity.jdnd.course3.critter.model.dto.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.model.entity.Customer;
 import com.udacity.jdnd.course3.critter.model.entity.Employee;
 import com.udacity.jdnd.course3.critter.model.entity.Pet;
-import com.udacity.jdnd.course3.critter.repository.EmployeeRepository;
-import com.udacity.jdnd.course3.critter.repository.PetRepository;
+import com.udacity.jdnd.course3.critter.repository.PetDAO;
 import com.udacity.jdnd.course3.critter.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,7 @@ import java.util.*;
 public class UserService {
 
     @Autowired
-    PetRepository petsRepository;
-    @Autowired
-    EmployeeRepository employeeRepository;
+    PetDAO petDAO;
     @Autowired
     UserRepository userRepository;
 
@@ -35,14 +32,14 @@ public class UserService {
     }
 
     public Customer getCustomerByPetId(long petId) {
-        return petsRepository.getOne(petId).getCustomer();
+        return petDAO.getPetById(petId).getCustomer();
     }
 
     public Customer saveCustomer(Customer customer, List<Long> petIds) {
         List<Pet> pets = new ArrayList<>();
         if(!CollectionUtils.isEmpty(petIds)){
             for(Long i:petIds){
-                Pet temp = petsRepository.getOne(i);
+                Pet temp = petDAO.getPetById(i);
                 customer.insertPet(temp);
             }
         }else{
@@ -52,27 +49,23 @@ public class UserService {
     }
 
     public Employee saveEmployee(@RequestBody Employee employee) {
-        return employeeRepository.save(employee);
+        return userRepository.saveEmployee(employee);
     }
 
-
     public Employee getEmployee(@PathVariable long employeeId) {
-        return employeeRepository.getOne(employeeId);
+        return userRepository.findEmployeeById(employeeId);
     }
 
     public void setAvailability(Set<DayOfWeek> daysAvailable, long employeeId) {
-        Employee employee = employeeRepository.getOne(employeeId);
+        Employee employee = userRepository.findEmployeeById(employeeId);
         employee.setDaysAvailable(daysAvailable);
-        employeeRepository.save(employee);
+        userRepository.saveEmployee(employee);
     }
 
     public List<Employee> findEmployeesForService(EmployeeRequestDTO employeeDTO) {
-        //input
         DayOfWeek target = employeeDTO.getDate().getDayOfWeek();
         Set<EmployeeSkill> skillSet = employeeDTO.getSkills();
-
-
-        List<Employee> list = employeeRepository.getAllByDaysAvailableContains(target);
+        List<Employee> list = userRepository.getAllEmployeesByDaysAvailableContains(target);
         List<Employee> newList = new ArrayList<>();
         for(Employee e: list){
             if(e.getSkills().containsAll(skillSet)){
@@ -83,10 +76,14 @@ public class UserService {
     }
 
     public List<Employee> findEmployeesByIds(List<Long> employeeIds){
-        return employeeRepository.findByIdIn(employeeIds);
+        return userRepository.findEmployeesByIds(employeeIds);
+    }
+
+    public List<Employee> findAllEmployees(){
+        return userRepository.findAllEmployee();
     }
 
     public Employee findEmployeeById(Long employeeId){
-        return employeeRepository.getOne(employeeId);
+        return userRepository.findEmployeeById(employeeId);
     }
 }

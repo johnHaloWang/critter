@@ -3,7 +3,6 @@ package com.udacity.jdnd.course3.critter.service;
 import com.udacity.jdnd.course3.critter.model.entity.Customer;
 import com.udacity.jdnd.course3.critter.model.entity.Pet;
 import com.udacity.jdnd.course3.critter.repository.PetDAO;
-import com.udacity.jdnd.course3.critter.repository.PetRepository;
 import com.udacity.jdnd.course3.critter.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,6 @@ import java.util.List;
 @Slf4j
 @Service
 public class PetService {
-
-    @Autowired
-    PetRepository petRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -41,7 +37,8 @@ public class PetService {
     public Pet savePet(Pet pet, long ownerId) {
         Customer customer= userRepository.findCustomerById(ownerId);
         pet.setCustomer(customer);
-        pet = petRepository.save(pet);
+        //pet = petRepository.save(pet);
+        pet = petDAO.savePet(pet, ownerId);
         customer.insertPet(pet);
         userRepository.saveCustomer(customer);
         return pet;

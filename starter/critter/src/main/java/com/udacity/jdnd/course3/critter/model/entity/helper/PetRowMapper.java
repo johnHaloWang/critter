@@ -1,6 +1,8 @@
-package com.udacity.jdnd.course3.critter.model.entity;
+package com.udacity.jdnd.course3.critter.model.entity.helper;
 
 import com.udacity.jdnd.course3.critter.model.dto.PetType;
+import com.udacity.jdnd.course3.critter.model.entity.Customer;
+import com.udacity.jdnd.course3.critter.model.entity.Pet;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
