@@ -6,6 +6,7 @@ import com.udacity.jdnd.course3.critter.model.entity.Customer;
 import com.udacity.jdnd.course3.critter.model.entity.Employee;
 import com.udacity.jdnd.course3.critter.model.entity.Pet;
 import com.udacity.jdnd.course3.critter.repository.PetDAO;
+import com.udacity.jdnd.course3.critter.repository.PetRepository;
 import com.udacity.jdnd.course3.critter.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class UserService {
     PetDAO petDAO;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    PetRepository petRepository;
 
     private final static String TAG_ = "UserService";
 
@@ -32,9 +35,12 @@ public class UserService {
     }
 
     public Customer getCustomerByPetId(long petId) {
-        Customer customer = petDAO.getPetById(petId).getCustomer();
-        List<Pet> pets = petDAO.getPetsByCustomerId(customer.getId());
-        customer.setPets(pets);
+        //Customer customer = petDAO.getPetById(petId).getCustomer();
+        Customer customer = petRepository.getOne(petId).getCustomer();
+        //List<Pet> pets = petDAO.getPetsByCustomerId(customer.getId());
+        List<Pet> pets = petRepository.findPetsByCustomerId(customer.getId());
+        //add this for PetDAO
+        //customer.setPets(pets);
         return customer;
     }
 
@@ -42,7 +48,8 @@ public class UserService {
         List<Pet> pets = new ArrayList<>();
         if(!CollectionUtils.isEmpty(petIds)){
             for(Long i:petIds){
-                Pet temp = petDAO.getPetById(i);
+                //Pet temp = petDAO.getPetById(i);
+                Pet temp = petRepository.getOne(i);
                 customer.insertPet(temp);
             }
         }else{

@@ -22,6 +22,8 @@ public class ScheduleService {
     @Autowired
     PetDAO petDAO;
     @Autowired
+    PetRepository petRepository;
+    @Autowired
     private ScheduleRepository scheduleRepository;
     @Autowired
     UserRepository userRepository;
@@ -41,9 +43,9 @@ public class ScheduleService {
 //    }
 
     public List<Schedule> getScheduleForPet(long petId) {
-        Pet pet = petDAO.getPetById(petId);
+        //Pet pet = petDAO.getPetById(petId);
+        Pet pet = petRepository.getOne(petId);
         return scheduleRepository.getAllByPetsContains(pet);
-        //return scheduleRepository.getAllByPets_id(petId);
     }
 
     public List<Schedule> getScheduleForEmployee(long employeeId) {

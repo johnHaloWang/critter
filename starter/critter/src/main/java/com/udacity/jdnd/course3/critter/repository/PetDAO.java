@@ -44,11 +44,11 @@ public class PetDAO {
             "customer.notes, " +
             "customer.phone_number " +
             "from pet " +
-            "left outer join customer ";
+            "inner join customer ";
 
     private static final String SELECT_ALL_PETS =
             SELECT_STRING +
-            "customer.id = pet.customer_id";
+            "where customer.id = pet.customer_id";
 
     private static final String SELECT_ALL_PETS_BY_CUSTOMER_ID =
             SELECT_STRING +
@@ -77,14 +77,13 @@ public class PetDAO {
                 connection -> {
                     PreparedStatement ps = connection
                             .prepareStatement(SAVE_STRING_QUERY, Statement.RETURN_GENERATED_KEYS);
-                    ps.setObject(1,pet.getBirthDate());
+                    ps.setObject(1, pet.getBirthDate());
                     ps.setObject(2, pet.getName());
                     ps.setObject(3, ownerId);
                     ps.setObject(4, pet.getType());
                     ps.setObject(5, pet.getNotes());
                     return ps;
-                }, keyHolder
-        );
+                }, keyHolder);
         long number = keyHolder.getKey().longValue();
         pet.setId(number);
         return pet;

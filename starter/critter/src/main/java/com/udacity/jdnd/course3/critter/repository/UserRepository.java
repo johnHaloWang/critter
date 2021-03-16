@@ -51,6 +51,8 @@ public class UserRepository {
     public List<Employee> findAllEmployee(){
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Employee> query = cb.createQuery(Employee.class);
+        Root<Employee> root = query.from(Employee.class);
+        query.select(root);
         return entityManager.createQuery(query).getResultList();
     }
 

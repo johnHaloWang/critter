@@ -7,6 +7,7 @@ import com.udacity.jdnd.course3.critter.controller.UserController;
 import com.udacity.jdnd.course3.critter.model.dto.*;
 import com.udacity.jdnd.course3.critter.controller.ScheduleController;
 import com.udacity.jdnd.course3.critter.model.dto.ScheduleDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import java.util.stream.IntStream;
  *
  * These tests should all pass once the project is complete.
  */
+@Slf4j
 @Transactional
 @SpringBootTest(classes = CritterApplication.class)
 public class CritterFunctionalTest {
@@ -203,6 +205,7 @@ public class CritterFunctionalTest {
         sched3.setPetIds(sched2.getPetIds());
         sched3.setActivities(Sets.newHashSet(EmployeeSkill.SHAVING, EmployeeSkill.PETTING));
         sched3.setDate(LocalDate.of(2020, 3, 23));
+        log.info("testing 1");
         scheduleController.createSchedule(sched3);
 
         /*
@@ -212,27 +215,33 @@ public class CritterFunctionalTest {
          */
 
         //Employee 1 in is both schedule 1 and 3
+        log.info("testing 2");
         List<ScheduleDTO> scheds1e = scheduleController.getScheduleForEmployee(sched1.getEmployeeIds().get(0));
         compareSchedules(sched1, scheds1e.get(0));
         compareSchedules(sched3, scheds1e.get(1));
 
         //Employee 2 is only in schedule 2
+        log.info("testing 3");
         List<ScheduleDTO> scheds2e = scheduleController.getScheduleForEmployee(sched2.getEmployeeIds().get(0));
         compareSchedules(sched2, scheds2e.get(0));
 
         //Pet 1 is only in schedule 1
+        log.info("testing 4");
         List<ScheduleDTO> scheds1p = scheduleController.getScheduleForPet(sched1.getPetIds().get(0));
         compareSchedules(sched1, scheds1p.get(0));
 
         //Pet from schedule 2 is in both schedules 2 and 3
+        log.info("testing 5");
         List<ScheduleDTO> scheds2p = scheduleController.getScheduleForPet(sched2.getPetIds().get(0));
         compareSchedules(sched2, scheds2p.get(0));
         compareSchedules(sched3, scheds2p.get(1));
 
+        log.info("testing 6");
         //Owner of the first pet will only be in schedule 1
         List<ScheduleDTO> scheds1c = scheduleController.getScheduleForCustomer(userController.getOwnerByPet(sched1.getPetIds().get(0)).getId());
         compareSchedules(sched1, scheds1c.get(0));
 
+        log.info("testing 7");
         //Owner of pet from schedule 2 will be in both schedules 2 and 3
         List<ScheduleDTO> scheds2c = scheduleController.getScheduleForCustomer(userController.getOwnerByPet(sched2.getPetIds().get(0)).getId());
         compareSchedules(sched2, scheds2c.get(0));

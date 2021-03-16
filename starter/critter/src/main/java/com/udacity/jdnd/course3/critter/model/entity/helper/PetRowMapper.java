@@ -21,13 +21,9 @@ public class PetRowMapper implements RowMapper<Pet> {
         pet.setName(rs.getString("pet.name"));
         pet.setType(rs.getString("pet.type"));
         pet.setNotes(rs.getString("pet.notes"));
-//
-        if(rs.getDate("pet.birth_date")==null){
-
-        }else{
+        if(rs.getDate("pet.birth_date")!=null){
             pet.setBirthDate(rs.getDate("pet.birth_date").toLocalDate());
         }
-        //pet.setBirthDate(LocalDate.of(2021, 1, 8));
         customer.setId(rs.getLong("pet.customer_id"));
         customer.setName(rs.getString("customer.name"));
         customer.setNotes(rs.getString("customer.notes"));
