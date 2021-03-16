@@ -16,6 +16,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.math.BigInteger;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.*;
 
 @Slf4j
@@ -29,49 +32,31 @@ public class PetDAO {
     @Autowired
     UserRepository userRepository;
 
+    private static final String SELECT_STRING =
+            "select pet.id, " +
+            "pet.birth_date, " +
+            "pet.name, " +
+            "pet.notes, " +
+            "pet.customer_id, " +
+            "pet.type, " +
+            "customer.id, " +
+            "customer.name, " +
+            "customer.notes, " +
+            "customer.phone_number " +
+            "from pet " +
+            "left outer join customer ";
+
     private static final String SELECT_ALL_PETS =
-            "select p.id , " +
-                    "p.birth_date, " +
-                    "p.name, " +
-                    "p.notes, " +
-                    "p.customer_id, " +
-                    "p.type, " +
-                    "c.id, " +
-                    "c.name, " +
-                    "c.notes, " +
-                    "c.phone_number " +
-                    "from Pet p " +
-                    "left outer join Customer c on c.id = p.customer_id";
+            SELECT_STRING +
+            "customer.id = pet.customer_id";
 
     private static final String SELECT_ALL_PETS_BY_CUSTOMER_ID =
-            "select p.id , " +
-                    "p.birth_date, " +
-                    "p.name, " +
-                    "p.notes, " +
-                    "p.customer_id, " +
-                    "p.type, " +
-                    "c.id, " +
-                    "c.name, " +
-                    "c.notes, " +
-                    "c.phone_number " +
-            "from Pet p " +
-            "left outer join Customer c on c.id = p.customer_id " +
-            "where p.customer_id = :customerId";
+            SELECT_STRING +
+            "where pet.customer_id = :customerId";
 
     private static final String SELECT_PET_BY_PET_ID =
-            "select p.id , " +
-                    "p.birth_date, " +
-                    "p.name, " +
-                    "p.notes, " +
-                    "p.customer_id, " +
-                    "p.type, " +
-                    "c.id, " +
-                    "c.name, " +
-                    "c.notes, " +
-                    "c.phone_number " +
-                    "from Pet p " +
-                    "left outer join Customer c on c.id = p.customer_id " +
-                    "where p.id = :petId";
+            SELECT_STRING +
+            "where pet.id = :petId";
 
     private static final String SAVE_STRING_QUERY =
             "INSERT INTO pet" +
@@ -79,36 +64,29 @@ public class PetDAO {
             "VALUES (?, ?, ?, ?, ?)";
 
     private static final String SELECT_PET_BY_IDS =
-            "select p.id , " +
-                    "p.birth_date, " +
-                    "p.name, " +
-                    "p.notes, " +
-                    "p.customer_id, " +
-                    "p.type, " +
-                    "c.id, " +
-                    "c.name, " +
-                    "c.notes, " +
-                    "c.phone_number " +
-            "from Pet p " +
-            "left outer join Customer c on c.id = p.customer_id " +
-            "where p.id in (%s)";
+            SELECT_STRING +
+            "where pet.id in (%s)";
 
     private static final RowMapper<Pet> petDataRowMapper = new BeanPropertyRowMapper<>(Pet.class);
 
     public Pet savePet(Pet pet, long ownerId) {
-//        simpleJdbcInsert.withTableName("pet").usingGeneratedKeyColumns("id");
-//        Map<String, Object> parameters = new HashMap<String, Object>();
-//        parameters.put("id", pet.getId());
-//        Number id = simpleJdbcInsert.executeAndReturnKey(parameters);
-//        pet.setId(Long.valueOf(new Long(id));
-
-        Customer customer= userRepository.findCustomerById(ownerId);
-        pet.setCustomer(customer);
+//        Customer customer= userRepository.findCustomerById(ownerId);
+//        pet.setCustomer(customer);
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        int status = jdbcTemplate.update(SAVE_STRING_QUERY,new Object[] {pet.getBirthDate(),pet.getName(),ownerId,pet.getType(),pet.getNotes()}, keyHolder);
-        //id is an issue
-        //pet.setId(status);
-        pet.setId((long) keyHolder.getKey());
+        jdbcTemplate.update(
+                connection -> {
+                    PreparedStatement ps = connection
+                            .prepareStatement(SAVE_STRING_QUERY, Statement.RETURN_GENERATED_KEYS);
+                    ps.setObject(1,pet.getBirthDate());
+                    ps.setObject(2, pet.getName());
+                    ps.setObject(3, ownerId);
+                    ps.setObject(4, pet.getType());
+                    ps.setObject(5, pet.getNotes());
+                    return ps;
+                }, keyHolder
+        );
+        long number = keyHolder.getKey().longValue();
+        pet.setId(number);
         return pet;
     }
 

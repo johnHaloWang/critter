@@ -32,7 +32,10 @@ public class UserService {
     }
 
     public Customer getCustomerByPetId(long petId) {
-        return petDAO.getPetById(petId).getCustomer();
+        Customer customer = petDAO.getPetById(petId).getCustomer();
+        List<Pet> pets = petDAO.getPetsByCustomerId(customer.getId());
+        customer.setPets(pets);
+        return customer;
     }
 
     public Customer saveCustomer(Customer customer, List<Long> petIds) {

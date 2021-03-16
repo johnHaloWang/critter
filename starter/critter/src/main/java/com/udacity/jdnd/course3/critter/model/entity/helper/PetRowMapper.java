@@ -3,26 +3,35 @@ package com.udacity.jdnd.course3.critter.model.entity.helper;
 import com.udacity.jdnd.course3.critter.model.dto.PetType;
 import com.udacity.jdnd.course3.critter.model.entity.Customer;
 import com.udacity.jdnd.course3.critter.model.entity.Pet;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
+@Slf4j
 public class PetRowMapper implements RowMapper<Pet> {
 
     @Override
     public Pet mapRow(ResultSet rs, int rowNum) throws SQLException {
         Pet pet = new Pet();
         Customer customer = new Customer();
-        pet.setId(rs.getLong("p.id"));
-        pet.setName(rs.getString("p.name"));
-        pet.setType(rs.getString("p.type"));
-        pet.setNotes(rs.getString("p.notes"));
-        pet.setBirthDate(rs.getTimestamp("p.birth_date").toLocalDateTime().toLocalDate());
-        customer.setId(rs.getLong("p.customer_id"));
-        customer.setName(rs.getString("c.name"));
-        customer.setNotes(rs.getString("c.notes"));
-        customer.setPhoneNumber(rs.getString("c.phone_number"));
+        pet.setId(rs.getLong("pet.id"));
+        pet.setName(rs.getString("pet.name"));
+        pet.setType(rs.getString("pet.type"));
+        pet.setNotes(rs.getString("pet.notes"));
+//
+        if(rs.getDate("pet.birth_date")==null){
+
+        }else{
+            pet.setBirthDate(rs.getDate("pet.birth_date").toLocalDate());
+        }
+        //pet.setBirthDate(LocalDate.of(2021, 1, 8));
+        customer.setId(rs.getLong("pet.customer_id"));
+        customer.setName(rs.getString("customer.name"));
+        customer.setNotes(rs.getString("customer.notes"));
+        customer.setPhoneNumber(rs.getString("customer.phone_number"));
         pet.setCustomer(customer);
         return pet;
     }
